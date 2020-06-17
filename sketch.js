@@ -9,7 +9,14 @@ var box1, box2, box3, box4, box5, box6, box7, box8, box9, box10, box11, box12, b
 var sling;
 var ball;
 var block1,block2,block3,block4,block5;
+var backgroundImg;
+var bg = "daybg.png";
+
 var score = 0;
+
+function preload() {
+  getbackground();
+}
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
@@ -47,7 +54,10 @@ function setup() {
 }
 
 function draw() {
-  background(233,56,63);
+  if(backgroundImg){
+    background(backgroundImg);
+    }
+    fill(255);
   Engine.update(engine);
   noStroke();
     textSize(35)
@@ -112,4 +122,18 @@ if(keyCode === 32){
   Matter.Body.setPosition(ball.body, {x:230,  y:400}  );
  sling.attach(ball.body);
 }
+}
+
+async function getbackground(){
+  var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
+  var responsejson = await response.json();
+  var datetime = responsejson.datetime;
+  var hour = datetime.slice(11,13);
+  if (hour>=06 && hour<=19){
+      bg="daybg.png";
+  }
+  else{
+      bg="nightbg.jpg";
+  }
+  backgroundImg = loadImage(bg);
 }
